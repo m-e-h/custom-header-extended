@@ -247,12 +247,18 @@ final class CHE_Custom_Headers_Filter {
 	public function header_image( $url ) {
 
 		/* If we're not viewing a singular post, return the URL. */
-		if ( !is_singular() )
+		if ( !is_singular() && !is_post_type_archive() )
 			return $url;
 
 		/* Get the queried post data. */
-		$post    = get_queried_object();
-		$post_id = get_queried_object_id();
+		if ( is_post_type_archive() ) :
+	        global $cptarchives;
+	        $post    = $cptarchives-> get_archive();
+	        $post_id = $cptarchives->get_archive_id();
+	    else:
+			$post    = get_queried_object();
+			$post_id = get_queried_object_id();
+	    endif;
 
 		/* If the post type doesn't support 'custom-header', return the URL. */
 		if ( !post_type_supports( $post->post_type, 'custom-header' ) )
@@ -385,12 +391,18 @@ final class CHE_Custom_Headers_Filter {
 	public function header_textcolor( $textcolor ) {
 
 		/* If we're not viewing a singular post, return the URL. */
-		if ( !is_singular() )
+		if ( !is_singular() && !is_post_type_archive() )
 			return $textcolor;
 
 		/* Get the queried post data. */
-		$post    = get_queried_object();
-		$post_id = get_queried_object_id();
+		if ( is_post_type_archive() ) :
+	        global $cptarchives;
+	        $post    = $cptarchives->get_archive();
+	        $post_id = $cptarchives->get_archive_id();
+	    else:
+			$post    = get_queried_object();
+			$post_id = get_queried_object_id();
+	    endif;
 
 		/* If the post type doesn't support 'custom-header', return the URL. */
 		if ( !post_type_supports( $post->post_type, 'custom-header' ) )
